@@ -104,6 +104,11 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.seed))
         tiles.placeOnTile(Seed_list[Seed_list.length - 1], mySprite.tilemapLocation())
+        for (let value of Tree_list) {
+            if (Seed_list[Seed_list.length - 1].x == value.x && Seed_list[Seed_list.length - 1].y == value.y) {
+                Seed_list.pop().destroy()
+            }
+        }
     } else {
         game.splash("change location")
     }
@@ -632,11 +637,12 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     }
 })
 let Ghost: Sprite = null
+let Tree_list: Sprite[] = []
 let Seed_list: Sprite[] = []
 let Apple_tree: Sprite[] = []
 let Sword = 0
 let mySprite: Sprite = null
-tiles.setCurrentTilemap(tilemap`level3`)
+tiles.setCurrentTilemap(tilemap`level1`)
 mySprite = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
@@ -655,6 +661,7 @@ mySprite = sprites.create(img`
     . . . . . f f f f f f . . . . . 
     . . . . . f f . . f f . . . . . 
     `, SpriteKind.Player)
+mySprite.setBounceOnWall(true)
 info.setLife(5)
 info.setScore(0)
 controller.moveSprite(mySprite)
@@ -816,10 +823,18 @@ for (let value of Apple_tree) {
     value.setPosition(randint(100, 240), randint(0, 160))
 }
 Seed_list = []
-let Tree_list: Sprite[] = []
+Tree_list = []
+forever(function () {
+    if (Count % 2 != 0) {
+        music.setVolume(115)
+        music.playMelody("C5 B G E F D C D ", 120)
+    } else {
+        music.playMelody("C5 B C5 A B G A F ", 300)
+    }
+})
 // days and nights
-// 
-game.onUpdateInterval(60000, function () {
+// 80s = 1day
+game.onUpdateInterval(40000, function () {
     Count += 1
     while (Tree_list.length != 0) {
         Apple_tree.push(sprites.create(img`
@@ -965,13 +980,5 @@ game.onUpdateInterval(60000, function () {
             Ghost.follow(mySprite, randint(30, 60))
             Ghost.setBounceOnWall(true)
         }
-    }
-})
-forever(function () {
-    if (Count % 2 != 0) {
-        music.setVolume(115)
-        music.playMelody("C5 B G E F D C D ", 120)
-    } else {
-        music.playMelody("C5 B C5 A B G A F ", 300)
     }
 })
