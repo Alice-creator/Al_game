@@ -345,6 +345,10 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     }
 })
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Food, function (sprite, otherSprite) {
+    otherSprite.startEffect(effects.spray, 1000)
+    Apple_tree.removeAt(Apple_tree.indexOf(otherSprite)).destroy()
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Sword % 2 != 1) {
         animation.runImageAnimation(
@@ -606,15 +610,30 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    if (controller.B.isPressed()) {
+        info.changeLifeBy(1)
+        info.changeScoreBy(1)
+        otherSprite.destroy(effects.spray, 500)
+        Apple_tree.removeAt(Apple_tree.indexOf(otherSprite))
+        music.setVolume(255)
+        music.playMelody("- - - F C5 - - - ", 500)
+    }
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (Sword % 2 != 1) {
-    	
-    } else {
+        info.changeLifeBy(-1)
+        music.playMelody("- - A E - - - - ", 500)
         otherSprite.destroy(effects.spray, 500)
+    } else {
+        music.baDing.play()
+        otherSprite.destroy(effects.spray, 500)
+        info.changeScoreBy(1)
     }
 })
 let Ghost: Sprite = null
 let Seed_list: Sprite[] = []
+let Apple_tree: Sprite[] = []
 let Sword = 0
 let mySprite: Sprite = null
 tiles.setCurrentTilemap(tilemap`level3`)
@@ -636,6 +655,8 @@ mySprite = sprites.create(img`
     . . . . . f f f f f f . . . . . 
     . . . . . f f . . f f . . . . . 
     `, SpriteKind.Player)
+info.setLife(5)
+info.setScore(0)
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 let House = sprites.create(img`
@@ -691,7 +712,7 @@ let House = sprites.create(img`
 House.setPosition(25, 25)
 let Count = 0
 Sword = 0
-let Apple_tree = [sprites.create(img`
+Apple_tree = [sprites.create(img`
     .............6666...............
     ..........666667766.6666........
     .........677777777767776........
@@ -795,49 +816,12 @@ for (let value of Apple_tree) {
     value.setPosition(randint(100, 240), randint(0, 160))
 }
 Seed_list = []
-let Tree_list = [sprites.create(img`
-    .............6666...............
-    ..........666667766.6666........
-    .........677777777767776........
-    ......66667775577757777666......
-    .....677666675557557776777666...
-    .....6776777775555577777766776..
-    ...66666777777775777777766666...
-    .66667767777755757555777776776..
-    6666777677775577557555777767766.
-    .6667767777777775577777777767666
-    .c6766777677777775777777677766..
-    cc77666667777777777777777666666c
-    cc76666677777777777777777766776c
-    c6666776777777777777766677666776
-    66667766667776777767767766766666
-    ccc76677677776677766767776776ccc
-    cc7766776777677677676667767766cc
-    .666c676667677766667766666666cc.
-    .ccc66676666776666677677666cccc.
-    ...ccc77c6767666676676677666ccc.
-    ...cc676c7766676677666666c666cc.
-    ....c6cc676c6677677c66c666ccc...
-    ....ccccc6c66667667cc6ccc6ccc...
-    ......ccccc66c66c66cccccccc.....
-    .......cc.cc6c6ccc6cccc.cc......
-    ...........cccccccccc...........
-    .............feeeeee............
-    ............feeeeeefe...........
-    .........eeeeefeeeffee..........
-    ............ffffeef..ee.........
-    ...............fee..............
-    ................e...............
-    `, SpriteKind.tree)]
-for (let value of Tree_list) {
-    value.setPosition(randint(100, 240), randint(0, 160))
-}
+let Tree_list: Sprite[] = []
 // days and nights
 // 
 game.onUpdateInterval(60000, function () {
     Count += 1
-    // van de bo nho (mang khong duoc don dep)
-    for (let value of Tree_list) {
+    while (Tree_list.length != 0) {
         Apple_tree.push(sprites.create(img`
             .............6666...............
             ..........666667766.6666........
@@ -871,46 +855,11 @@ game.onUpdateInterval(60000, function () {
             ............ffffeef..ee.........
             ...............fee..............
             ................e...............
-            `, SpriteKind.tree))
-        tiles.placeOnTile(sprites.create(img`
-            .............6666...............
-            ..........666667766.6666........
-            .........677777777767776........
-            ......66667775577757777666......
-            .....677666675557557776227666...
-            .....6776777775555577772266776..
-            ...66666777777775777777766666...
-            .66667767777755757555777776776..
-            6666722677775577557555777767766.
-            .6667227777777775577777722767666
-            .c6766777677777775777777227766..
-            cc77666667777777777777777666666c
-            cc76666677777777777777777766776c
-            c6666776777777777777766677666776
-            66667766667776777767767766766666
-            ccc76677672276677762267776776ccc
-            cc7766776722677677622667767766cc
-            .666c676667677766667766666666cc.
-            .ccc66676666776666677677666cccc.
-            ...ccc77c6767666676676677666ccc.
-            ...cc676c7766676677666666c666cc.
-            ....c6cc676c6677677c66c666ccc...
-            ....ccccc6c66667667cc6ccc6ccc...
-            ......ccccc66c66c66cccccccc.....
-            .......cc.cc6c6ccc6cccc.cc......
-            ...........cccccccccc...........
-            .............feeeeee............
-            ............feeeeeefe...........
-            .........eeeeefeeeffee..........
-            ............ffffeef..ee.........
-            ...............fee..............
-            ................e...............
-            `, SpriteKind.tree), value.tilemapLocation())
-        value.destroy(effects.spray, 500)
+            `, SpriteKind.Food))
+        tiles.placeOnTile(Apple_tree[Apple_tree.length - 1], Tree_list[0].tilemapLocation())
+        Tree_list.removeAt(0).destroy(effects.spray, 500)
     }
-    // van de bo nho (mang khong duoc don dep)
-    for (let value of Seed_list) {
-        let list: number[] = []
+    while (Seed_list.length != 0) {
         Tree_list.push(sprites.create(img`
             .............6666...............
             ..........666667766.6666........
@@ -945,11 +894,15 @@ game.onUpdateInterval(60000, function () {
             ...............fee..............
             ................e...............
             `, SpriteKind.tree))
-        tiles.placeOnTile(Tree_list[list.length - 1], value.tilemapLocation())
-        value.destroy(effects.spray, 500)
+        tiles.placeOnTile(Tree_list[Tree_list.length - 1], Seed_list[0].tilemapLocation())
+        Seed_list.removeAt(0).destroy(effects.spray, 500)
     }
     if (Count % 2 != 0) {
         tiles.setCurrentTilemap(tilemap`level12`)
+        info.changeLifeBy(-1)
+    } else {
+        tiles.setCurrentTilemap(tilemap`level17`)
+        info.changeScoreBy(2)
         for (let index = 0; index < Count + randint(0, 4); index++) {
             Ghost = sprites.create(img`
                 ........................
@@ -1012,7 +965,13 @@ game.onUpdateInterval(60000, function () {
             Ghost.follow(mySprite, randint(30, 60))
             Ghost.setBounceOnWall(true)
         }
+    }
+})
+forever(function () {
+    if (Count % 2 != 0) {
+        music.setVolume(115)
+        music.playMelody("C5 B G E F D C D ", 120)
     } else {
-        tiles.setCurrentTilemap(tilemap`level17`)
+        music.playMelody("C5 B C5 A B G A F ", 300)
     }
 })
