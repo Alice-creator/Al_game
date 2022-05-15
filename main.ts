@@ -2,80 +2,13 @@ namespace SpriteKind {
     export const Place = SpriteKind.create()
     export const seed = SpriteKind.create()
     export const tree = SpriteKind.create()
+    export const Boss = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     mySprite,
-    [img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f e e e e f f . . . . 
-        . . . f e e e f f e e e f . . . 
-        . . f f f f f 2 2 f f f f f . . 
-        . . f f e 2 e 2 2 e 2 e f f . . 
-        . . f e 2 f 2 f f 2 f 2 e f . . 
-        . . f f f 2 2 e e 2 2 f f f . . 
-        . f f e f 2 f e e f 2 f e f f . 
-        . f e e f f e e e e f e e e f . 
-        . . f e e e e e e e e e e f . . 
-        . . . f e e e e e e e e f . . . 
-        . . e 4 f f f f f f f f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 4 4 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f e e e e f f . . . . 
-        . . . f e e e f f e e e f . . . 
-        . . . f f f f 2 2 f f f f . . . 
-        . . f f e 2 e 2 2 e 2 e f f . . 
-        . . f e 2 f 2 f f f 2 f e f . . 
-        . . f f f 2 f e e 2 2 f f f . . 
-        . . f e 2 f f e e 2 f e e f . . 
-        . f f e f f e e e f e e e f f . 
-        . f f e e e e e e e e e e f f . 
-        . . . f e e e e e e e e f . . . 
-        . . . e f f f f f f f f 4 e . . 
-        . . . 4 f 2 2 2 2 2 e d d 4 . . 
-        . . . e f f f f f f e e 4 . . . 
-        . . . . f f f . . . . . . . . . 
-        `,img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f e e e e f f . . . . 
-        . . . f e e e f f e e e f . . . 
-        . . f f f f f 2 2 f f f f f . . 
-        . . f f e 2 e 2 2 e 2 e f f . . 
-        . . f e 2 f 2 f f 2 f 2 e f . . 
-        . . f f f 2 2 e e 2 2 f f f . . 
-        . f f e f 2 f e e f 2 f e f f . 
-        . f e e f f e e e e f e e e f . 
-        . . f e e e e e e e e e e f . . 
-        . . . f e e e e e e e e f . . . 
-        . . e 4 f f f f f f f f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 4 4 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f e e e e f f . . . . 
-        . . . f e e e f f e e e f . . . 
-        . . . f f f f 2 2 f f f f . . . 
-        . . f f e 2 e 2 2 e 2 e f f . . 
-        . . f e f 2 f f f 2 f 2 e f . . 
-        . . f f f 2 2 e e f 2 f f f . . 
-        . . f e e f 2 e e f f 2 e f . . 
-        . f f e e e f e e e f f e f f . 
-        . f f e e e e e e e e e e f f . 
-        . . . f e e e e e e e e f . . . 
-        . . e 4 f f f f f f f f e . . . 
-        . . 4 d d e 2 2 2 2 2 f 4 . . . 
-        . . . 4 e e f f f f f f e . . . 
-        . . . . . . . . . f f f . . . . 
-        `],
-    100,
+    assets.animation`Back Soldier Animation`,
+    200,
     true
     )
 })
@@ -85,30 +18,9 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileGrass1) || tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileDarkGrass1)) {
         tiles.setTileAt(mySprite.tilemapLocation(), sprites.castle.tilePath5)
     } else if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
-        Seed_list.push(sprites.create(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . 4 4 . . . . . . . 
-            . . . . . . 4 5 5 4 . . . . . . 
-            . . . . . . 2 5 5 2 . . . . . . 
-            . . . . . . . 2 2 . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.seed))
+        Seed_list.push(sprites.create(assets.image`Seed`, SpriteKind.seed))
         tiles.placeOnTile(Seed_list[Seed_list.length - 1], mySprite.tilemapLocation())
-        for (let index = 0; index <= Seed_list.length - 2; index++) {
-            if (Seed_list[Seed_list.length - 1].x == Seed_list[index].x && Seed_list[Seed_list.length - 1].y == Seed_list[index].y) {
-                Seed_list.pop().destroy()
-            }
-        }
+        tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`Dat Trong Cay`)
         for (let value of Tree_list) {
             if (Seed_list[Seed_list.length - 1].x == value.x && Seed_list[Seed_list.length - 1].y == value.y) {
                 Seed_list.pop().destroy()
@@ -123,24 +35,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     Sword += 1
     if (Sword % 2 != 0) {
-        mySprite.setImage(img`
-            . . . . . . f f f f . . . . . . 
-            . . . . f f f 2 2 f f f . . . . 
-            . . . f f f 2 2 2 2 f f f . . . 
-            . . f f f e e e e e e f f f . . 
-            . . f f e 2 2 2 2 2 2 e e f . . 
-            . . f e 2 f f f f f f 2 e f . . 
-            . . f f f f e e e e f f f f . . 
-            . f f e f b f 4 4 f b f e f f . 
-            . f e e 4 1 f d d f 1 4 e e f . 
-            . . f e e d d d d d d e e f . . 
-            . . . f e e 4 4 4 4 e e f . . . 
-            . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-            . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-            . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-            . . . . . f f f f f f . . . . . 
-            . . . . . f f . . f f . . . . . 
-            `)
+        mySprite.setImage(assets.image`soldier`)
     } else {
         mySprite.setImage(img`
             ......ffff..............
@@ -249,108 +144,8 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     } else {
         animation.runImageAnimation(
         mySprite,
-        [img`
-            ..............ffffff....
-            .............f2feeeeff..
-            ............f222feeeeff.
-            .......cc...feeeeffeeef.
-            .......cdc.fe2222eeffff.
-            .......cddcf2effff222ef.
-            ........cddcffeeefffffff
-            .........cddce44fbe44eff
-            ..........cdceddf14d4eef
-            ..........cccdeddd4eeef.
-            ...........edd4e44eeff..
-            ............ee442222f...
-            .............f2e2222f...
-            .............f554444f...
-            ..............ffffff....
-            ................fff.....
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `,img`
-            ........................
-            ..............fff.......
-            .............f2fffff....
-            ...........ff22eeeeeff..
-            ..........ff222eeeeeeff.
-            ..........feeeefffeeeef.
-            .........fe2222eeefffff.
-            .........f2efffff222efff
-            ..cc.....fffeeefffffffff
-            ..cdcc...fee44fbbe44efef
-            ..ccddcc..feddfbb4d4eef.
-            ....cdddceefddddd4eeef..
-            .....ccdcddee2222222f...
-            ......cccdd44e544444f...
-            .........eeeeffffffff...
-            .............ff...fff...
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `,img`
-            ...............ff.......
-            .............ff2ffff....
-            ............ff2feeeeff..
-            ...........ff22feeeeeff.
-            ...........feeeeffeeeef.
-            ..........fe2222eefffff.
-            ..........f2effff222efff
-            ..........fffeeeffffffff
-            ..........fee44fbe44efef
-            ...........feddfb4d4eef.
-            ..........c.eeddd4eeef..
-            ....ccccccceddee2222f...
-            .....dddddcedd44e444f...
-            ......ccccc.eeeefffff...
-            ..........c...ffffffff..
-            ...............ff..fff..
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `,img`
-            ..............ffffff....
-            .............f2feeeeff..
-            ............f222feeeeff.
-            ............feeeeffeeef.
-            ...........fe2222eeffff.
-            ...........f2effff222ef.
-            ...........fffeeefffffff
-            ...........fee44fbe44eff
-            ............feddf14d4eef
-            .............fdddd4eeef.
-            .............fe444eddf..
-            .............ccc22eddf..
-            .............cdc22fee...
-            ............cddc4444f...
-            ...........cddcfffff....
-            ..........cddc..fff.....
-            ..........cdc...........
-            ..........cc............
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `],
-        100,
+        assets.animation`Danh trai`,
+        200,
         true
         )
     }
@@ -438,185 +233,21 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     } else {
         animation.runImageAnimation(
         mySprite,
-        [img`
-            ........................
-            ....ffffff..............
-            ..ffeeeef2f.............
-            .ffeeeef222f............
-            .feeeffeeeef...cc.......
-            .ffffee2222ef.cdc.......
-            .fe222ffffe2fcddc.......
-            fffffffeeeffcddc........
-            ffe44ebf44ecddc.........
-            fee4d41fddecdc..........
-            .feee4dddedccc..........
-            ..ffee44e4dde...........
-            ...f222244ee............
-            ...f2222e2f.............
-            ...f444455f.............
-            ....ffffff..............
-            .....fff................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `,img`
-            ........................
-            .......fff..............
-            ....fffff2f.............
-            ..ffeeeee22ff...........
-            .ffeeeeee222ff..........
-            .feeeefffeeeef..........
-            .fffffeee2222ef.........
-            fffe222fffffe2f.........
-            fffffffffeeefff.....cc..
-            fefe44ebbf44eef...ccdc..
-            .fee4d4bbfddef..ccddcc..
-            ..feee4dddddfeecdddc....
-            ...f2222222eeddcdcc.....
-            ...f444445e44ddccc......
-            ...ffffffffeeee.........
-            ...fff...ff.............
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `,img`
-            .......ff...............
-            ....ffff2ff.............
-            ..ffeeeef2ff............
-            .ffeeeeef22ff...........
-            .feeeeffeeeef...........
-            .fffffee2222ef..........
-            fffe222ffffe2f..........
-            ffffffffeeefff..........
-            fefe44ebf44eef..........
-            .fee4d4bfddef...........
-            ..feee4dddee.c..........
-            ...f2222eeddeccccccc....
-            ...f444e44ddecddddd.....
-            ...fffffeeee.ccccc......
-            ..ffffffff...c..........
-            ..fff..ff...............
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `,img`
-            ....ffffff..............
-            ..ffeeeef2f.............
-            .ffeeeef222f............
-            .feeeffeeeef............
-            .ffffee2222ef...........
-            .fe222ffffe2f...........
-            fffffffeeefff...........
-            ffe44ebf44eef...........
-            fee4d41fddef............
-            .feee4ddddf.............
-            ..fdde444ef.............
-            ..fdde22ccc.............
-            ...eef22cdc.............
-            ...f4444cddc............
-            ....fffffcddc...........
-            .....fff..cddc..........
-            ...........cdc..........
-            ............cc..........
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `],
-        100,
+        assets.animation`Danh phai`,
+        200,
         true
         )
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    otherSprite.destroy()
+})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     mySprite,
-    [img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . . f e 2 f f f f f f 2 e f . . 
-        . . f f f f e e e e f f f f . . 
-        . f f e f b f 4 4 f b f e f f . 
-        . f e e 4 1 f d d f 1 4 e e f . 
-        . . f e e d d d d d d e e f . . 
-        . . . f e e 4 4 4 4 e e f . . . 
-        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . f f e 2 f f f f f f 2 e f f . 
-        . f f f f f e e e e f f f f f . 
-        . . f e f b f 4 4 f b f e f . . 
-        . . f e 4 1 f d d f 1 4 e f . . 
-        . . . f e 4 d d d d 4 e f e . . 
-        . . f e f 2 2 2 2 e d d 4 e . . 
-        . . e 4 f 2 2 2 2 e d d e . . . 
-        . . . . f 4 4 5 5 f e e . . . . 
-        . . . . f f f f f f f . . . . . 
-        . . . . f f f . . . . . . . . . 
-        `,img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . . f e 2 f f f f f f 2 e f . . 
-        . . f f f f e e e e f f f f . . 
-        . f f e f b f 4 4 f b f e f f . 
-        . f e e 4 1 f d d f 1 4 e e f . 
-        . . f e e d d d d d d e e f . . 
-        . . . f e e 4 4 4 4 e e f . . . 
-        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f e e 2 2 2 2 2 2 e f f . . 
-        . f f e 2 f f f f f f 2 e f f . 
-        . f f f f f e e e e f f f f f . 
-        . . f e f b f 4 4 f b f e f . . 
-        . . f e 4 1 f d d f 1 4 e f . . 
-        . . e f e 4 d d d d 4 e f . . . 
-        . . e 4 d d e 2 2 2 2 f e f . . 
-        . . . e d d e 2 2 2 2 f 4 e . . 
-        . . . . e e f 5 5 4 4 f . . . . 
-        . . . . . f f f f f f f . . . . 
-        . . . . . . . . . f f f . . . . 
-        `],
-    100,
+    assets.animation`Soldier Animation`,
+    200,
     true
     )
 })
@@ -626,7 +257,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
         info.changeScoreBy(1)
         otherSprite.destroy(effects.spray, 500)
         Apple_tree.removeAt(Apple_tree.indexOf(otherSprite))
-        music.setVolume(255)
+        music.setVolume(150)
         music.playMelody("- - - F C5 - - - ", 500)
     }
 })
@@ -646,30 +277,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     }
 })
 let Ghost: Sprite = null
+let Boss: Sprite = null
+let projectile: Sprite = null
 let Tree_list: Sprite[] = []
 let Seed_list: Sprite[] = []
 let Apple_tree: Sprite[] = []
 let Sword = 0
 let mySprite: Sprite = null
-tiles.setCurrentTilemap(tilemap`50x50_Night`)
-mySprite = sprites.create(img`
-    . . . . . . f f f f . . . . . . 
-    . . . . f f f 2 2 f f f . . . . 
-    . . . f f f 2 2 2 2 f f f . . . 
-    . . f f f e e e e e e f f f . . 
-    . . f f e 2 2 2 2 2 2 e e f . . 
-    . . f e 2 f f f f f f 2 e f . . 
-    . . f f f f e e e e f f f f . . 
-    . f f e f b f 4 4 f b f e f f . 
-    . f e e 4 1 f d d f 1 4 e e f . 
-    . . f e e d d d d d d e e f . . 
-    . . . f e e 4 4 4 4 e e f . . . 
-    . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-    . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-    . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-    . . . . . f f f f f f . . . . . 
-    . . . . . f f . . f f . . . . . 
-    `, SpriteKind.Player)
+mySprite = sprites.create(assets.image`soldier`, SpriteKind.Player)
 mySprite.setBounceOnWall(true)
 info.setLife(5)
 info.setScore(0)
@@ -728,6 +343,7 @@ let House = sprites.create(img`
 House.setPosition(25, 25)
 let Count = 0
 Sword = 0
+let SummonBoss = 0
 Apple_tree = [sprites.create(img`
     .............6666...............
     ..........666667766.6666........
@@ -833,9 +449,19 @@ for (let value of Apple_tree) {
 }
 Seed_list = []
 Tree_list = []
+game.onUpdateInterval(1000, function () {
+    if (SummonBoss == 1) {
+        for (let index = 0; index < 2; index++) {
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50, randint(-50, 50))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50, randint(-50, 50))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), 50)
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), -50)
+        }
+    }
+})
 forever(function () {
     if (Count % 2 != 0) {
-        music.setVolume(115)
+        music.setVolume(30)
         music.playMelody("C5 B G E F D C D ", 120)
     } else {
         music.playMelody("C5 B C5 A B G A F ", 300)
@@ -921,11 +547,33 @@ game.onUpdateInterval(10000, function () {
         tiles.placeOnTile(Tree_list[Tree_list.length - 1], Seed_list[0].tilemapLocation())
         Seed_list.removeAt(0).destroy(effects.spray, 500)
     }
-    if (Count % 2 != 0) {
-        tiles.setCurrentTilemap(tilemap`50x50_Night`)
+    if (Count >= 1) {
+        tiles.setCurrentTilemap(tilemap`Final map`)
+        if (SummonBoss == 0) {
+            mySprite.setPosition(15, 51)
+            Boss = sprites.create(assets.image`The eye`, SpriteKind.Boss)
+            animation.runImageAnimation(
+            Boss,
+            assets.animation`Eye Animation`,
+            200,
+            true
+            )
+            Boss.setPosition(142, 64)
+            mySprite.setPosition(10, 55)
+            Boss.follow(mySprite, 20)
+            SummonBoss += 1
+            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Place)
+            sprites.destroyAllSpritesOfKind(SpriteKind.tree)
+            sprites.destroyAllSpritesOfKind(SpriteKind.seed)
+        }
+    } else if (Count == 7) {
+    	
+    } else if (Count % 2 != 0) {
+        tiles.setCurrentTilemap(tilemap`Days1`)
         info.changeLifeBy(-1)
     } else {
-        tiles.setCurrentTilemap(tilemap`50x50_DAY`)
+        tiles.setCurrentTilemap(tilemap`Nights`)
         info.changeScoreBy(2)
         for (let index = 0; index < Count + randint(0, 4); index++) {
             Ghost = sprites.create(img`
@@ -989,5 +637,14 @@ game.onUpdateInterval(10000, function () {
             Ghost.follow(mySprite, randint(30, 60))
             Ghost.setBounceOnWall(true)
         }
+    }
+    for (let value of tiles.getTilesByType(assets.tile`myTile6`)) {
+        tiles.setWallAt(value, true)
+    }
+    for (let value of tiles.getTilesByType(sprites.builtin.forestTiles0)) {
+        tiles.setWallAt(value, true)
+    }
+    for (let value of tiles.getTilesByType(sprites.castle.rock0)) {
+        tiles.setWallAt(value, true)
     }
 })
