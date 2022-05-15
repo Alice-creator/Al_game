@@ -104,6 +104,11 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.seed))
         tiles.placeOnTile(Seed_list[Seed_list.length - 1], mySprite.tilemapLocation())
+        for (let index = 0; index <= Seed_list.length - 2; index++) {
+            if (Seed_list[Seed_list.length - 1].x == Seed_list[index].x && Seed_list[Seed_list.length - 1].y == Seed_list[index].y) {
+                Seed_list.pop().destroy()
+            }
+        }
         for (let value of Tree_list) {
             if (Seed_list[Seed_list.length - 1].x == value.x && Seed_list[Seed_list.length - 1].y == value.y) {
                 Seed_list.pop().destroy()
@@ -625,6 +630,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
         music.playMelody("- - - F C5 - - - ", 500)
     }
 })
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.tree, function (sprite, otherSprite) {
+    otherSprite.startEffect(effects.spray, 1000)
+    Tree_list.removeAt(Tree_list.indexOf(otherSprite)).destroy()
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (Sword % 2 != 1) {
         info.changeLifeBy(-1)
@@ -834,7 +843,7 @@ forever(function () {
 })
 // days and nights
 // 80s = 1day
-game.onUpdateInterval(40000, function () {
+game.onUpdateInterval(10000, function () {
     Count += 1
     while (Tree_list.length != 0) {
         Apple_tree.push(sprites.create(img`
