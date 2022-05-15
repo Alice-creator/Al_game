@@ -832,6 +832,9 @@ forever(function () {
         music.playMelody("C5 B C5 A B G A F ", 300)
     }
 })
+forever(function () {
+	
+})
 // days and nights
 // 80s = 1day
 game.onUpdateInterval(40000, function () {
