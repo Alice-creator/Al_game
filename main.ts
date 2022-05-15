@@ -651,7 +651,7 @@ let Seed_list: Sprite[] = []
 let Apple_tree: Sprite[] = []
 let Sword = 0
 let mySprite: Sprite = null
-tiles.setCurrentTilemap(tilemap`level1`)
+tiles.setCurrentTilemap(tilemap`50x50_Night`)
 mySprite = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
@@ -922,10 +922,10 @@ game.onUpdateInterval(10000, function () {
         Seed_list.removeAt(0).destroy(effects.spray, 500)
     }
     if (Count % 2 != 0) {
-        tiles.setCurrentTilemap(tilemap`level12`)
+        tiles.setCurrentTilemap(tilemap`50x50_Night`)
         info.changeLifeBy(-1)
     } else {
-        tiles.setCurrentTilemap(tilemap`level17`)
+        tiles.setCurrentTilemap(tilemap`50x50_DAY`)
         info.changeScoreBy(2)
         for (let index = 0; index < Count + randint(0, 4); index++) {
             Ghost = sprites.create(img`
