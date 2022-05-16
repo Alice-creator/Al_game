@@ -749,6 +749,7 @@ game.onUpdateInterval(40000, function () {
             tiles.setCurrentTilemap(tilemap`Day_Off1`)
         }
         info.changeLifeBy(-1)
+        game.splash("Day", Count % 2)
     } else {
         if (Letter_T == 1) {
             tiles.setCurrentTilemap(tilemap`Night_Off`)
