@@ -316,7 +316,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
     otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Boss, SpriteKind.bullet, function (sprite, otherSprite) {
-    Bossstatus.value += 8 - Finish
+    Bossstatus.value += -8 - Finish
     otherSprite.destroy()
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
