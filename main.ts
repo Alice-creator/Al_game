@@ -49,8 +49,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
                 Seed_list.pop().destroy()
             }
         }
-    } else {
-        game.splash("change location")
     }
 })
 sprites.onOverlap(SpriteKind.bullet, SpriteKind.Bossphu, function (sprite, otherSprite) {
@@ -440,7 +438,7 @@ House.setPosition(25, 25)
 sprites.create(assets.image`C`, SpriteKind.Letter).setPosition(480, 380)
 sprites.create(assets.image`O`, SpriteKind.Letter).setPosition(685, 685)
 let Letter_T = 1
-let Letter_I = 1
+let Letter_I = 0
 Finish = 6
 let Count = 0
 Sword = 0
@@ -571,7 +569,7 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
-                `, mySprite, 100, 0)
+                `, mySprite, 200, 0)
         } else if (right == 0) {
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -590,7 +588,7 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
-                `, mySprite, -100, 0)
+                `, mySprite, -200, 0)
         }
         projectile2.setKind(SpriteKind.bullet)
     }
@@ -756,7 +754,10 @@ game.onUpdateInterval(40000, function () {
         } else {
             tiles.setCurrentTilemap(tilemap`Nights1`)
         }
-        tiles.placeOnRandomTile(sprites.create(assets.image`I`, SpriteKind.Letter), sprites.dungeon.collectibleInsignia)
+        if (Letter_I == 0) {
+            tiles.placeOnRandomTile(sprites.create(assets.image`I`, SpriteKind.Letter), sprites.dungeon.collectibleInsignia)
+            Letter_I += 1
+        }
         info.changeScoreBy(2)
         for (let index = 0; index < Count + randint(0, 4); index++) {
             Ghost = sprites.create(img`
