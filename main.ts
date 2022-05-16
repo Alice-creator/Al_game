@@ -380,7 +380,7 @@ let Finish = 0
 let mySprite: Sprite = null
 mySprite = sprites.create(assets.image`soldier`, SpriteKind.Player)
 mySprite.setBounceOnWall(true)
-info.setLife(5)
+info.setLife(6)
 info.setScore(0)
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
@@ -569,7 +569,7 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
-                `, mySprite, 200, 0)
+                `, mySprite, 250, 0)
         } else if (right == 0) {
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
@@ -588,7 +588,7 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
-                `, mySprite, -200, 0)
+                `, mySprite, -250, 0)
         }
         projectile2.setKind(SpriteKind.bullet)
     }
