@@ -198,7 +198,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Food, function (sprite, otherSpri
     Apple_tree.removeAt(Apple_tree.indexOf(otherSprite)).destroy()
 })
 sprites.onOverlap(SpriteKind.bullet, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.spray, 500)
+    otherSprite.destroy(effects.spray, 200)
     sprite.destroy()
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
@@ -345,10 +345,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     if (Sword % 3 != 1) {
         info.changeLifeBy(-1)
         music.playMelody("- - A E - - - - ", 500)
-        otherSprite.destroy(effects.spray, 500)
+        otherSprite.destroy(effects.spray, 200)
     } else {
         music.baDing.play()
-        otherSprite.destroy(effects.spray, 500)
+        otherSprite.destroy(effects.spray, 200)
         info.changeScoreBy(1)
     }
 })
@@ -749,7 +749,7 @@ game.onUpdateInterval(40000, function () {
             tiles.setCurrentTilemap(tilemap`Day_Off1`)
         }
         info.changeLifeBy(-1)
-        game.splash("Day", Count % 2)
+        game.splash("Day", (Count + 1) / 2)
     } else {
         if (Letter_T == 1) {
             tiles.setCurrentTilemap(tilemap`Night_Off`)
