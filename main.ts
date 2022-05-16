@@ -744,16 +744,16 @@ game.onUpdateInterval(40000, function () {
         }
     } else if (Count % 2 != 0) {
         if (Letter_T == 1) {
-            tiles.setCurrentTilemap(tilemap`Days1`)
+            tiles.setCurrentTilemap(tilemap`Day_Off`)
         } else {
-            tiles.setCurrentTilemap(tilemap`Days3`)
+            tiles.setCurrentTilemap(tilemap`Day_Off1`)
         }
         info.changeLifeBy(-1)
     } else {
         if (Letter_T == 1) {
-            tiles.setCurrentTilemap(tilemap`Nights`)
+            tiles.setCurrentTilemap(tilemap`Night_Off`)
         } else {
-            tiles.setCurrentTilemap(tilemap`Nights1`)
+            tiles.setCurrentTilemap(tilemap`Night_Off1`)
         }
         if (Letter_I == 0) {
             tiles.placeOnRandomTile(sprites.create(assets.image`I`, SpriteKind.Letter), sprites.dungeon.collectibleInsignia)
