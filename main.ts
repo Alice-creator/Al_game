@@ -3,7 +3,26 @@ namespace SpriteKind {
     export const seed = SpriteKind.create()
     export const tree = SpriteKind.create()
     export const Boss = SpriteKind.create()
+    export const bullet = SpriteKind.create()
+    export const Cup = SpriteKind.create()
+    export const Letter = SpriteKind.create()
+    export const Bossphu = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Bossphu, function (sprite, otherSprite) {
+    if (Sword % 3 != 1) {
+        info.changeLifeBy(-1)
+        music.playMelody("- - A E - - - - ", 500)
+        otherSprite.destroy(effects.spray, 500)
+        SummonBoss = 3
+        tiles.placeOnTile(sprites.create(assets.image`R`, SpriteKind.Letter), otherSprite.tilemapLocation())
+    } else {
+        music.baDing.play()
+        otherSprite.destroy(effects.spray, 500)
+        info.changeScoreBy(1)
+        SummonBoss = 3
+        tiles.placeOnTile(sprites.create(assets.image`R`, SpriteKind.Letter), otherSprite.tilemapLocation())
+    }
+})
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     mySprite,
@@ -11,6 +30,10 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     200,
     true
     )
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Food, function (sprite, otherSprite) {
+    otherSprite.startEffect(effects.spray, 1000)
+    Apple_tree.removeAt(Apple_tree.indexOf(otherSprite)).destroy()
 })
 // seeding
 // 
@@ -30,13 +53,25 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         game.splash("change location")
     }
 })
+sprites.onOverlap(SpriteKind.bullet, SpriteKind.Bossphu, function (sprite, otherSprite) {
+    tiles.placeOnTile(sprites.create(assets.image`R`, SpriteKind.Letter), otherSprite.tilemapLocation())
+    sprite.destroy()
+    otherSprite.destroy(effects.spray, 500)
+    SummonBoss = 3
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Place, function (sprite, otherSprite) {
+    V = sprites.create(assets.image`V`, SpriteKind.Letter)
+    V.setPosition(otherSprite.x, otherSprite.y)
+    otherSprite.destroy(effects.spray, 500)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Cup, function (sprite, otherSprite) {
+    game.over(true)
+})
 // rut-thu kiem
 // 
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     Sword += 1
-    if (Sword % 2 != 0) {
-        mySprite.setImage(assets.image`soldier`)
-    } else {
+    if (Sword % 2 == 1) {
         mySprite.setImage(img`
             ......ffff..............
             ....fff22fff............
@@ -63,10 +98,13 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             ........................
             ........................
             `)
+    } else {
+        mySprite.setImage(assets.image`soldier`)
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (Sword % 2 != 1) {
+    right = 0
+    if (Sword % 3 == 0) {
         animation.runImageAnimation(
         mySprite,
         [img`
@@ -141,10 +179,17 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
         100,
         true
         )
-    } else {
+    } else if (Sword % 3 == 1) {
         animation.runImageAnimation(
         mySprite,
         assets.animation`Danh trai`,
+        200,
+        true
+        )
+    } else {
+        animation.runImageAnimation(
+        mySprite,
+        assets.animation`Left Gun`,
         200,
         true
         )
@@ -154,8 +199,30 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Food, function (sprite, otherSpri
     otherSprite.startEffect(effects.spray, 1000)
     Apple_tree.removeAt(Apple_tree.indexOf(otherSprite)).destroy()
 })
+sprites.onOverlap(SpriteKind.bullet, SpriteKind.Enemy, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.spray, 500)
+    sprite.destroy()
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    tiles.placeOnTile(sprites.create(assets.image`T`, SpriteKind.Letter), location)
+    tiles.setTileAt(location, sprites.dungeon.chestOpen)
+    Letter_T += -1
+})
+statusbars.onZero(StatusBarKind.Health, function (status) {
+    Cup = sprites.create(assets.image`Cup`, SpriteKind.Cup)
+    tiles.placeOnTile(Cup, Bossstatus.spriteAttachedTo().tilemapLocation())
+    animation.runImageAnimation(
+    Cup,
+    assets.animation`Cup Animation`,
+    200,
+    true
+    )
+    Bossstatus.spriteAttachedTo().destroy(effects.spray, 500)
+    SummonBoss = 3
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (Sword % 2 != 1) {
+    right = 1
+    if (Sword % 3 == 0) {
         animation.runImageAnimation(
         mySprite,
         [img`
@@ -230,10 +297,17 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
         100,
         true
         )
-    } else {
+    } else if (Sword % 3 == 1) {
         animation.runImageAnimation(
         mySprite,
         assets.animation`Danh phai`,
+        200,
+        true
+        )
+    } else {
+        animation.runImageAnimation(
+        mySprite,
+        assets.animation`Right Gun`,
         200,
         true
         )
@@ -241,6 +315,10 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
+    otherSprite.destroy()
+})
+sprites.onOverlap(SpriteKind.Boss, SpriteKind.bullet, function (sprite, otherSprite) {
+    Bossstatus.value += 8 - Finish
     otherSprite.destroy()
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -266,7 +344,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.tree, function (sprite, otherSpri
     Tree_list.removeAt(Tree_list.indexOf(otherSprite)).destroy()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (Sword % 2 != 1) {
+    if (Sword % 3 != 1) {
         info.changeLifeBy(-1)
         music.playMelody("- - A E - - - - ", 500)
         otherSprite.destroy(effects.spray, 500)
@@ -276,13 +354,31 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         info.changeScoreBy(1)
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Letter, function (sprite, otherSprite) {
+    Finish += -1
+    otherSprite.destroy(effects.spray, 500)
+    game.splash("ACHIEVE LETTER")
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function (sprite, otherSprite) {
+    game.over(false)
+    sprite.destroy()
+})
 let Ghost: Sprite = null
+let Bossphu: Sprite = null
+let projectile3: Sprite = null
 let Boss: Sprite = null
 let projectile: Sprite = null
+let projectile2: Sprite = null
+let Bossstatus: StatusBarSprite = null
+let Cup: Sprite = null
+let V: Sprite = null
 let Tree_list: Sprite[] = []
 let Seed_list: Sprite[] = []
 let Apple_tree: Sprite[] = []
+let right = 0
+let SummonBoss = 0
 let Sword = 0
+let Finish = 0
 let mySprite: Sprite = null
 mySprite = sprites.create(assets.image`soldier`, SpriteKind.Player)
 mySprite.setBounceOnWall(true)
@@ -341,9 +437,15 @@ let House = sprites.create(img`
     ......6ccc666c66e4e44e44e44e44ee66c666ccc6......
     `, SpriteKind.Place)
 House.setPosition(25, 25)
+sprites.create(assets.image`C`, SpriteKind.Letter).setPosition(480, 380)
+sprites.create(assets.image`O`, SpriteKind.Letter).setPosition(685, 685)
+let Letter_T = 1
+let Letter_I = 1
+Finish = 6
 let Count = 0
 Sword = 0
-let SummonBoss = 0
+SummonBoss = 0
+right = 1
 Apple_tree = [sprites.create(img`
     .............6666...............
     ..........666667766.6666........
@@ -450,12 +552,63 @@ for (let value of Apple_tree) {
 Seed_list = []
 Tree_list = []
 game.onUpdateInterval(1000, function () {
+    if (Sword % 3 == 2) {
+        if (right == 1) {
+            projectile2 = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, mySprite, 100, 0)
+        } else if (right == 0) {
+            projectile2 = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, mySprite, -100, 0)
+        }
+        projectile2.setKind(SpriteKind.bullet)
+    }
+})
+game.onUpdateInterval(1000, function () {
     if (SummonBoss == 1) {
         for (let index = 0; index < 2; index++) {
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50, randint(-50, 50))
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50, randint(-50, 50))
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), 50)
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), -50)
+        }
+    } else if (SummonBoss == 2) {
+        for (let index = 0; index < 2; index++) {
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, 50, randint(-50, 50))
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, -50, randint(-50, 50))
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), 50)
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), -50)
         }
     }
 })
@@ -469,7 +622,7 @@ forever(function () {
 })
 // days and nights
 // 80s = 1day
-game.onUpdateInterval(10000, function () {
+game.onUpdateInterval(40000, function () {
     Count += 1
     while (Tree_list.length != 0) {
         Apple_tree.push(sprites.create(img`
@@ -547,8 +700,25 @@ game.onUpdateInterval(10000, function () {
         tiles.placeOnTile(Tree_list[Tree_list.length - 1], Seed_list[0].tilemapLocation())
         Seed_list.removeAt(0).destroy(effects.spray, 500)
     }
-    if (Count >= 1) {
+    if (Count == 14) {
+        Bossphu = sprites.create(assets.image`myImage`, SpriteKind.Bossphu)
+        tiles.placeOnRandomTile(Bossphu, sprites.builtin.forestTiles14)
+        Bossphu.setVelocity(randint(-30, -45), randint(-30, -45))
+        Bossphu.setBounceOnWall(true)
+        SummonBoss = 2
+    }
+    if (Count >= 30 || Finish == 0) {
+        if (Count < 30) {
+            Count = 30
+        }
         tiles.setCurrentTilemap(tilemap`Final map`)
+        if (Count == 30) {
+            game.splash("VICTOR")
+            game.splash("It's my name")
+            game.splash("finally, my memory is back")
+            game.splash("READY FOR FINAL BOSS")
+            SummonBoss = 0
+        }
         if (SummonBoss == 0) {
             mySprite.setPosition(15, 51)
             Boss = sprites.create(assets.image`The eye`, SpriteKind.Boss)
@@ -558,6 +728,10 @@ game.onUpdateInterval(10000, function () {
             200,
             true
             )
+            Bossstatus = statusbars.create(50, 6, StatusBarKind.Health)
+            Bossstatus.attachToSprite(Boss)
+            Bossstatus.setBarBorder(1, 5)
+            Bossstatus.setColor(2, 15)
             Boss.setPosition(142, 64)
             mySprite.setPosition(10, 55)
             Boss.follow(mySprite, 20)
@@ -566,14 +740,23 @@ game.onUpdateInterval(10000, function () {
             sprites.destroyAllSpritesOfKind(SpriteKind.Place)
             sprites.destroyAllSpritesOfKind(SpriteKind.tree)
             sprites.destroyAllSpritesOfKind(SpriteKind.seed)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Bossphu)
         }
-    } else if (Count == 7) {
-    	
     } else if (Count % 2 != 0) {
-        tiles.setCurrentTilemap(tilemap`Days1`)
+        if (Letter_T == 1) {
+            tiles.setCurrentTilemap(tilemap`Days1`)
+        } else {
+            tiles.setCurrentTilemap(tilemap`Days3`)
+        }
         info.changeLifeBy(-1)
     } else {
-        tiles.setCurrentTilemap(tilemap`Nights`)
+        if (Letter_T == 1) {
+            tiles.setCurrentTilemap(tilemap`Nights`)
+        } else {
+            tiles.setCurrentTilemap(tilemap`Nights1`)
+        }
+        tiles.placeOnRandomTile(sprites.create(assets.image`I`, SpriteKind.Letter), sprites.dungeon.collectibleInsignia)
         info.changeScoreBy(2)
         for (let index = 0; index < Count + randint(0, 4); index++) {
             Ghost = sprites.create(img`
@@ -602,7 +785,7 @@ game.onUpdateInterval(10000, function () {
                 ........................
                 ........................
                 `, SpriteKind.Enemy)
-            Ghost.setPosition(124, 26)
+            tiles.placeOnRandomTile(Ghost, sprites.builtin.forestTiles14)
             Ghost.setVelocity(randint(-50, 50), randint(-50, 50))
             Ghost.setBounceOnWall(true)
         }
@@ -633,7 +816,7 @@ game.onUpdateInterval(10000, function () {
                 ........................
                 ........................
                 `, SpriteKind.Enemy)
-            Ghost.setPosition(124, 26)
+            tiles.placeOnRandomTile(Ghost, sprites.builtin.forestTiles14)
             Ghost.follow(mySprite, randint(30, 60))
             Ghost.setBounceOnWall(true)
         }
