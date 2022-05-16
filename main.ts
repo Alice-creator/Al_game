@@ -312,7 +312,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
+    info.changeLifeBy(-1 + -1 * Finish)
     otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Boss, SpriteKind.bullet, function (sprite, otherSprite) {
@@ -595,7 +595,7 @@ game.onUpdateInterval(1000, function () {
 })
 game.onUpdateInterval(1000, function () {
     if (SummonBoss == 1) {
-        for (let index = 0; index < 2; index++) {
+        for (let index = 0; index < 2 + Finish; index++) {
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50, randint(-50, 50))
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50, randint(-50, 50))
             projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), 50)
@@ -615,6 +615,7 @@ forever(function () {
         music.setVolume(30)
         music.playMelody("C5 B G E F D C D ", 120)
     } else {
+        music.setVolume(35)
         music.playMelody("C5 B C5 A B G A F ", 300)
     }
 })
@@ -698,7 +699,7 @@ game.onUpdateInterval(40000, function () {
         tiles.placeOnTile(Tree_list[Tree_list.length - 1], Seed_list[0].tilemapLocation())
         Seed_list.removeAt(0).destroy(effects.spray, 500)
     }
-    if (Count == 14) {
+    if (Count == 10) {
         Bossphu = sprites.create(assets.image`myImage`, SpriteKind.Bossphu)
         tiles.placeOnRandomTile(Bossphu, sprites.builtin.forestTiles14)
         Bossphu.setVelocity(randint(-30, -45), randint(-30, -45))
@@ -759,7 +760,7 @@ game.onUpdateInterval(40000, function () {
             Letter_I += 1
         }
         info.changeScoreBy(2)
-        for (let index = 0; index < Count + randint(0, 4); index++) {
+        for (let index = 0; index < 2 + randint(0, 4); index++) {
             Ghost = sprites.create(img`
                 ........................
                 ........................
@@ -790,7 +791,7 @@ game.onUpdateInterval(40000, function () {
             Ghost.setVelocity(randint(-50, 50), randint(-50, 50))
             Ghost.setBounceOnWall(true)
         }
-        for (let index = 0; index < Count; index++) {
+        for (let index = 0; index < 4; index++) {
             Ghost = sprites.create(img`
                 ........................
                 ........................
