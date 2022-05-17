@@ -8,28 +8,48 @@ namespace SpriteKind {
     export const Letter = SpriteKind.create()
     export const Bossphu = SpriteKind.create()
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Bossphu, function (sprite, otherSprite) {
-    if (Sword % 3 != 1) {
-        info.changeLifeBy(-1)
-        music.playMelody("- - A E - - - - ", 500)
-        otherSprite.destroy(effects.spray, 500)
-        SummonBoss = 3
-        tiles.placeOnTile(sprites.create(assets.image`R`, SpriteKind.Letter), otherSprite.tilemapLocation())
-    } else {
-        music.baDing.play()
-        otherSprite.destroy(effects.spray, 500)
-        info.changeScoreBy(1)
-        SummonBoss = 3
-        tiles.placeOnTile(sprites.create(assets.image`R`, SpriteKind.Letter), otherSprite.tilemapLocation())
-    }
-})
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+namespace StatusBarKind {
+    export const BOSSPHUHEALTH = StatusBarKind.create()
+}
+statusbars.onStatusReached(StatusBarKind.BOSSPHUHEALTH, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 0, function (status) {
+    SummonBoss = 3
+    R = sprites.create(assets.image`R`, SpriteKind.Player)
     animation.runImageAnimation(
-    mySprite,
-    assets.animation`Back Soldier Animation`,
-    200,
+    R,
+    assets.animation`R_animation`,
+    100,
     true
     )
+    tiles.placeOnTile(R, Bossphustatus.spriteAttachedTo().tilemapLocation())
+    Bossphustatus.spriteAttachedTo().destroy(effects.spray, 500)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Bossphu, function (sprite, otherSprite) {
+    if (!(controller.A.isPressed())) {
+        pause(200)
+    }
+    if (controller.A.isPressed()) {
+        if (right) {
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Danh phai`,
+            100,
+            false
+            )
+        } else {
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Danh trai`,
+            200,
+            false
+            )
+        }
+        music.baDing.play()
+        info.changeScoreBy(1)
+        Bossphustatus.value += -20
+    } else {
+        info.changeLifeBy(-3)
+    }
+    pause(1000)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Food, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.spray, 1000)
@@ -52,161 +72,30 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.bullet, SpriteKind.Bossphu, function (sprite, otherSprite) {
-    tiles.placeOnTile(sprites.create(assets.image`R`, SpriteKind.Letter), otherSprite.tilemapLocation())
-    sprite.destroy()
-    otherSprite.destroy(effects.spray, 500)
-    SummonBoss = 3
+    Bossphustatus.value += -20
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Place, function (sprite, otherSprite) {
     V = sprites.create(assets.image`V`, SpriteKind.Letter)
+    animation.runImageAnimation(
+    V,
+    assets.animation`V_animation`,
+    100,
+    true
+    )
     V.setPosition(otherSprite.x, otherSprite.y)
     otherSprite.destroy(effects.spray, 500)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Cup, function (sprite, otherSprite) {
     game.over(true)
 })
-// rut-thu kiem
-// 
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    Sword += 1
-    if (Sword % 2 == 1) {
-        mySprite.setImage(img`
-            ......ffff..............
-            ....fff22fff............
-            ...fff2222fff...........
-            ..fffeeeeeefff..........
-            ..ffe222222eef..........
-            ..fe2ffffff2ef..........
-            ..ffffeeeeffff......ccc.
-            .ffefbf44fbfeff....cddc.
-            .ffefbf44fbfeff...cddc..
-            .fee4dddddd4eef.ccddc...
-            fdfeeddddd4eeffecddc....
-            fbffee4444ee4fddccc.....
-            fbf4f222222f1edde.......
-            fcf.f222222f44ee........
-            .ff.f445544f............
-            ....ffffffff............
-            .....ff..ff.............
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            ........................
-            `)
-    } else {
-        mySprite.setImage(assets.image`soldier`)
-    }
-})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     right = 0
-    if (Sword % 3 == 0) {
-        animation.runImageAnimation(
-        mySprite,
-        [img`
-            . . . . f f f f f f . . . . . . 
-            . . . f 2 f e e e e f f . . . . 
-            . . f 2 2 2 f e e e e f f . . . 
-            . . f e e e e f f e e e f . . . 
-            . f e 2 2 2 2 e e f f f f . . . 
-            . f 2 e f f f f 2 2 2 e f . . . 
-            . f f f e e e f f f f f f f . . 
-            . f e e 4 4 f b e 4 4 e f f . . 
-            . . f e d d f 1 4 d 4 e e f . . 
-            . . . f d d d d 4 e e e f . . . 
-            . . . f e 4 4 4 e e f f . . . . 
-            . . . f 2 2 2 e d d 4 . . . . . 
-            . . . f 2 2 2 e d d e . . . . . 
-            . . . f 5 5 4 f e e f . . . . . 
-            . . . . f f f f f f . . . . . . 
-            . . . . . . f f f . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . f f f f f f . . . . . . 
-            . . . f 2 f e e e e f f . . . . 
-            . . f 2 2 2 f e e e e f f . . . 
-            . . f e e e e f f e e e f . . . 
-            . f e 2 2 2 2 e e f f f f . . . 
-            . f 2 e f f f f 2 2 2 e f . . . 
-            . f f f e e e f f f f f f f . . 
-            . f e e 4 4 f b e 4 4 e f f . . 
-            . . f e d d f 1 4 d 4 e e f . . 
-            . . . f d d d e e e e e f . . . 
-            . . . f e 4 e d d 4 f . . . . . 
-            . . . f 2 2 e d d e f . . . . . 
-            . . f f 5 5 f e e f f f . . . . 
-            . . f f f f f f f f f f . . . . 
-            . . . f f f . . . f f . . . . . 
-            `,img`
-            . . . . f f f f f f . . . . . . 
-            . . . f 2 f e e e e f f . . . . 
-            . . f 2 2 2 f e e e e f f . . . 
-            . . f e e e e f f e e e f . . . 
-            . f e 2 2 2 2 e e f f f f . . . 
-            . f 2 e f f f f 2 2 2 e f . . . 
-            . f f f e e e f f f f f f f . . 
-            . f e e 4 4 f b e 4 4 e f f . . 
-            . . f e d d f 1 4 d 4 e e f . . 
-            . . . f d d d d 4 e e e f . . . 
-            . . . f e 4 4 4 e e f f . . . . 
-            . . . f 2 2 2 e d d 4 . . . . . 
-            . . . f 2 2 2 e d d e . . . . . 
-            . . . f 5 5 4 f e e f . . . . . 
-            . . . . f f f f f f . . . . . . 
-            . . . . . . f f f . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . f f f f f f . . . . . . 
-            . . . f 2 f e e e e f f . . . . 
-            . . f 2 2 2 f e e e e f f . . . 
-            . . f e e e e f f e e e f . . . 
-            . f e 2 2 2 2 e e f f f f . . . 
-            . f 2 e f f f f 2 2 2 e f . . . 
-            . f f f e e e f f f f f f f . . 
-            . f e e 4 4 f b e 4 4 e f f . . 
-            . . f e d d f 1 4 d 4 e e f . . 
-            . . . f d d d d 4 e e e f . . . 
-            . . . f e 4 4 4 e d d 4 . . . . 
-            . . . f 2 2 2 2 e d d e . . . . 
-            . . f f 5 5 4 4 f e e f . . . . 
-            . . f f f f f f f f f f . . . . 
-            . . . f f f . . . f f . . . . . 
-            `],
-        100,
-        true
-        )
-    } else if (Sword % 3 == 1) {
-        animation.runImageAnimation(
-        mySprite,
-        assets.animation`Danh trai`,
-        200,
-        true
-        )
-    } else {
-        animation.runImageAnimation(
-        mySprite,
-        assets.animation`Left Gun`,
-        200,
-        true
-        )
-    }
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Food, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.spray, 1000)
     Apple_tree.removeAt(Apple_tree.indexOf(otherSprite)).destroy()
 })
-sprites.onOverlap(SpriteKind.bullet, SpriteKind.Enemy, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.spray, 200)
-    sprite.destroy()
-})
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
-    tiles.placeOnTile(sprites.create(assets.image`T`, SpriteKind.Letter), location)
-    tiles.setTileAt(location, sprites.dungeon.chestOpen)
-    Letter_T += -1
-})
-statusbars.onZero(StatusBarKind.Health, function (status) {
+statusbars.onStatusReached(StatusBarKind.Health, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 0, function (status) {
     Cup = sprites.create(assets.image`Cup`, SpriteKind.Cup)
     tiles.placeOnTile(Cup, Bossstatus.spriteAttachedTo().tilemapLocation())
     animation.runImageAnimation(
@@ -218,114 +107,32 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
     Bossstatus.spriteAttachedTo().destroy(effects.spray, 500)
     SummonBoss = 3
 })
+sprites.onOverlap(SpriteKind.bullet, SpriteKind.Enemy, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.spray, 200)
+    sprite.destroy()
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    T = sprites.create(assets.image`T`, SpriteKind.Player)
+    tiles.placeOnTile(T, location)
+    animation.runImageAnimation(
+    mySprite,
+    assets.animation`T_animation`,
+    100,
+    true
+    )
+    tiles.setTileAt(location, sprites.dungeon.chestOpen)
+    Letter_T += -1
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     right = 1
-    if (Sword % 3 == 0) {
-        animation.runImageAnimation(
-        mySprite,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . f f f f f f . . . . . 
-            . . . f f e e e e f 2 f . . . . 
-            . . f f e e e e f 2 2 2 f . . . 
-            . . f e e e f f e e e e f . . . 
-            . . f f f f e e 2 2 2 2 e f . . 
-            . . f e 2 2 2 f f f f e 2 f . . 
-            . f f f f f f f e e e f f f . . 
-            . f f e 4 4 e b f 4 4 e e f . . 
-            . f e e 4 d 4 1 f d d e f . . . 
-            . . f e e e e e d d d f . . . . 
-            . . . . f 4 d d e 4 e f . . . . 
-            . . . . f e d d e 2 2 f . . . . 
-            . . . f f f e e f 5 5 f f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . f f . . . f f f . . . . 
-            `,img`
-            . . . . . f f f f f f . . . . . 
-            . . . f f e e e e f 2 f . . . . 
-            . . f f e e e e f 2 2 2 f . . . 
-            . . f e e e f f e e e e f . . . 
-            . . f f f f e e 2 2 2 2 e f . . 
-            . . f e 2 2 2 f f f f e 2 f . . 
-            . f f f f f f f e e e f f f . . 
-            . f f e 4 4 e b f 4 4 e e f . . 
-            . f e e 4 d 4 1 f d d e f f . . 
-            . . f e e e 4 d d d d f d d f . 
-            . . . f f e e 4 e e e f b b f . 
-            . . . . f 2 2 2 4 d d e b b f . 
-            . . . . e 2 2 2 e d d e b f . . 
-            . . . . f 4 4 4 f e e f f . . . 
-            . . . . . f f f f f f . . . . . 
-            . . . . . . f f f . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . f f f f f f . . . . . 
-            . . . f f e e e e f 2 f . . . . 
-            . . f f e e e e f 2 2 2 f . . . 
-            . . f e e e f f e e e e f . . . 
-            . . f f f f e e 2 2 2 2 e f . . 
-            . . f e 2 2 2 f f f f e 2 f . . 
-            . f f f f f f f e e e f f f . . 
-            . f f e 4 4 e b f 4 4 e e f . . 
-            . f e e 4 d 4 1 f d d e f . . . 
-            . . f e e e e e d d d f . . . . 
-            . . . . f 4 d d e 4 e f . . . . 
-            . . . . f e d d e 2 2 f . . . . 
-            . . . f f f e e f 5 5 f f . . . 
-            . . . f f f f f f f f f f . . . 
-            . . . . f f . . . f f f . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . f f f f f f . . . . . 
-            . . . f f e e e e f 2 f . . . . 
-            . . f f e e e e f 2 2 2 f . . . 
-            . . f e e e f f e e e e f . . . 
-            . . f f f f e e 2 2 2 2 e f . . 
-            . . f e 2 2 2 f f f f e 2 f . . 
-            . f f f f f f f e e e f f f . . 
-            . f f e 4 4 e b f 4 4 e e f . . 
-            . f e e 4 d 4 1 f d d e f f . . 
-            . . f e e e 4 d d d d f d d f . 
-            . . . . f e e 4 e e e f b b f . 
-            . . . . f 2 2 2 4 d d e b b f . 
-            . . . f f 4 4 4 e d d e b f . . 
-            . . . f f f f f f e e f f . . . 
-            . . . . f f . . . f f f . . . . 
-            `],
-        100,
-        true
-        )
-    } else if (Sword % 3 == 1) {
-        animation.runImageAnimation(
-        mySprite,
-        assets.animation`Danh phai`,
-        200,
-        true
-        )
-    } else {
-        animation.runImageAnimation(
-        mySprite,
-        assets.animation`Right Gun`,
-        200,
-        true
-        )
-    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     info.changeLifeBy(-1 + -1 * Finish)
     otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Boss, SpriteKind.bullet, function (sprite, otherSprite) {
-    Bossstatus.value += -8 - Finish
+    Bossstatus.value += -3 - Finish
     otherSprite.destroy()
-})
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    mySprite,
-    assets.animation`Soldier Animation`,
-    200,
-    true
-    )
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     if (controller.B.isPressed()) {
@@ -342,40 +149,61 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.tree, function (sprite, otherSpri
     Tree_list.removeAt(Tree_list.indexOf(otherSprite)).destroy()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (Sword % 3 != 1) {
-        info.changeLifeBy(-1)
-        music.playMelody("- - A E - - - - ", 500)
-        otherSprite.destroy(effects.spray, 200)
-    } else {
+    if (!(controller.A.isPressed())) {
+        pause(200)
+    }
+    if (controller.A.isPressed()) {
+        if (right) {
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Danh phai`,
+            100,
+            false
+            )
+        } else {
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Danh trai`,
+            200,
+            false
+            )
+        }
         music.baDing.play()
         otherSprite.destroy(effects.spray, 200)
         info.changeScoreBy(1)
+    } else {
+        info.changeLifeBy(-1)
+        music.playMelody("- - A E - - - - ", 500)
+        otherSprite.destroy(effects.spray, 200)
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Letter, function (sprite, otherSprite) {
     Finish += -1
     otherSprite.destroy(effects.spray, 500)
-    game.splash("ACHIEVE LETTER")
+    game.splash(Finish, "ITEMS LEFT")
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function (sprite, otherSprite) {
     game.over(false)
     sprite.destroy()
 })
 let Ghost: Sprite = null
+let I: Sprite = null
+let projectile2: Sprite = null
 let Bossphu: Sprite = null
 let projectile3: Sprite = null
 let Boss: Sprite = null
 let projectile: Sprite = null
-let projectile2: Sprite = null
+let T: Sprite = null
 let Bossstatus: StatusBarSprite = null
 let Cup: Sprite = null
 let V: Sprite = null
+let Bossphustatus: StatusBarSprite = null
+let R: Sprite = null
 let Tree_list: Sprite[] = []
 let Seed_list: Sprite[] = []
 let Apple_tree: Sprite[] = []
 let right = 0
 let SummonBoss = 0
-let Sword = 0
 let Finish = 0
 let mySprite: Sprite = null
 mySprite = sprites.create(assets.image`soldier`, SpriteKind.Player)
@@ -435,13 +263,26 @@ let House = sprites.create(img`
     ......6ccc666c66e4e44e44e44e44ee66c666ccc6......
     `, SpriteKind.Place)
 House.setPosition(25, 25)
-sprites.create(assets.image`C`, SpriteKind.Letter).setPosition(480, 380)
-sprites.create(assets.image`O`, SpriteKind.Letter).setPosition(685, 685)
+let C = sprites.create(assets.image`C`, SpriteKind.Letter)
+C.setPosition(480, 380)
+let O = sprites.create(assets.image`O`, SpriteKind.Letter)
+O.setPosition(685, 685)
+animation.runImageAnimation(
+C,
+assets.animation`C_animation`,
+100,
+true
+)
+animation.runImageAnimation(
+O,
+assets.animation`O_animation`,
+100,
+true
+)
 let Letter_T = 1
 let Letter_I = 0
 Finish = 6
 let Count = 0
-Sword = 0
 SummonBoss = 0
 right = 1
 Apple_tree = [sprites.create(img`
@@ -549,9 +390,226 @@ for (let value of Apple_tree) {
 }
 Seed_list = []
 Tree_list = []
+character.loopFrames(
+mySprite,
+assets.animation`Back Soldier Animation`,
+100,
+character.rule(Predicate.MovingUp)
+)
+character.loopFrames(
+mySprite,
+assets.animation`Soldier Animation`,
+100,
+character.rule(Predicate.MovingDown)
+)
+character.loopFrames(
+mySprite,
+[img`
+    .....................
+    .....ffffff..........
+    ...ffeeeef2f.........
+    ..ffeeeef222f........
+    ..feeeffeeeef........
+    ..ffffee2222ef.......
+    ..fe222ffffe2f.......
+    .fffffffeeefff.......
+    .ffe44ebf44eef.......
+    .fee4d41fddef........
+    ..feeeeedddf.........
+    ....f4dde4ef.........
+    ....fedde22f.........
+    ...fffeef55ff........
+    ...ffffffffff........
+    ....ff...fff.........
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `,img`
+    .....ffffff..........
+    ...ffeeeef2f.........
+    ..ffeeeef222f........
+    ..feeeffeeeef........
+    ..ffffee2222ef.......
+    ..fe222ffffe2f.......
+    .fffffffeeefff.......
+    .ffe44ebf44eef.......
+    .fee4d41fddeff.......
+    ..feee4ddddfddf......
+    ...ffee4eeefbbf......
+    ....f2224ddebbf......
+    ....e222eddebf.......
+    ....f444feeff........
+    .....ffffff..........
+    ......fff............
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `,img`
+    .....................
+    .....ffffff..........
+    ...ffeeeef2f.........
+    ..ffeeeef222f........
+    ..feeeffeeeef........
+    ..ffffee2222ef.......
+    ..fe222ffffe2f.......
+    .fffffffeeefff.......
+    .ffe44ebf44eef.......
+    .fee4d41fddef........
+    ..feeeeedddf.........
+    ....f4dde4ef.........
+    ....fedde22f.........
+    ...fffeef55ff........
+    ...ffffffffff........
+    ....ff...fff.........
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `,img`
+    .....................
+    .....ffffff..........
+    ...ffeeeef2f.........
+    ..ffeeeef222f........
+    ..feeeffeeeef........
+    ..ffffee2222ef.......
+    ..fe222ffffe2f.......
+    .fffffffeeefff.......
+    .ffe44ebf44eef.......
+    .fee4d41fddeff.......
+    ..feee4ddddfddf......
+    ....fee4eeefbbf......
+    ....f2224ddebbf......
+    ...ff444eddebf.......
+    ...ffffffeeff........
+    ....ff...fff.........
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `],
+100,
+character.rule(Predicate.MovingRight)
+)
+character.loopFrames(
+mySprite,
+[img`
+    ....ffffff...........
+    ...f2feeeeff.........
+    ..f222feeeeff........
+    ..feeeeffeeef........
+    .fe2222eeffff........
+    .f2effff222ef........
+    .fffeeefffffff.......
+    .fee44fbe44eff.......
+    ..feddf14d4eef.......
+    ...fdddd4eeef........
+    ...fe444eeff.........
+    ...f222edd4..........
+    ...f222edde..........
+    ...f554feef..........
+    ....ffffff...........
+    ......fff............
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `,img`
+    .....................
+    ....ffffff...........
+    ...f2feeeeff.........
+    ..f222feeeeff........
+    ..feeeeffeeef........
+    .fe2222eeffff........
+    .f2effff222ef........
+    .fffeeefffffff.......
+    .fee44fbe44eff.......
+    ..feddf14d4eef.......
+    ...fdddeeeeef........
+    ...fe4edd4f..........
+    ...f22eddef..........
+    ..ff55feefff.........
+    ..ffffffffff.........
+    ...fff...ff..........
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `,img`
+    ....ffffff...........
+    ...f2feeeeff.........
+    ..f222feeeeff........
+    ..feeeeffeeef........
+    .fe2222eeffff........
+    .f2effff222ef........
+    .fffeeefffffff.......
+    .fee44fbe44eff.......
+    ..feddf14d4eef.......
+    ...fdddd4eeef........
+    ...fe444eeff.........
+    ...f222edd4..........
+    ...f222edde..........
+    ...f554feef..........
+    ....ffffff...........
+    ......fff............
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `,img`
+    .....................
+    ....ffffff...........
+    ...f2feeeeff.........
+    ..f222feeeeff........
+    ..feeeeffeeef........
+    .fe2222eeffff........
+    .f2effff222ef........
+    .fffeeefffffff.......
+    .fee44fbe44eff.......
+    ..feddf14d4eef.......
+    ...fdddd4eeef........
+    ...fe444edd4.........
+    ...f2222edde.........
+    ..ff5544feef.........
+    ..ffffffffff.........
+    ...fff...ff..........
+    .....................
+    .....................
+    .....................
+    .....................
+    .....................
+    `],
+100,
+character.rule(Predicate.MovingLeft)
+)
 game.onUpdateInterval(1000, function () {
-    if (Sword % 3 == 2) {
-        if (right == 1) {
+    if (SummonBoss == 1) {
+        for (let index = 0; index < 2 + Finish; index++) {
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50 + randint(Finish, Finish + 20), randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50 + randint(Finish, Finish + 20), randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)), -50 + randint(Finish, Finish + 20))
+        }
+    } else if (SummonBoss == 2) {
+        for (let index = 0; index < Finish; index++) {
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, 50, randint(-50, 50))
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, -50, randint(-50, 50))
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), 50)
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), -50)
+        }
+    }
+})
+forever(function () {
+    if (controller.A.isPressed()) {
+        if (right) {
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -570,7 +628,13 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, mySprite, 250, 0)
-        } else if (right == 0) {
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Right Gun`,
+            250,
+            false
+            )
+        } else {
             projectile2 = sprites.createProjectileFromSprite(img`
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
@@ -589,25 +653,15 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, mySprite, -250, 0)
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Left Gun`,
+            250,
+            false
+            )
         }
         projectile2.setKind(SpriteKind.bullet)
-    }
-})
-game.onUpdateInterval(1000, function () {
-    if (SummonBoss == 1) {
-        for (let index = 0; index < 2 + Finish; index++) {
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50, randint(-50, 50))
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50, randint(-50, 50))
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), 50)
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-50, 50), -50)
-        }
-    } else if (SummonBoss == 2) {
-        for (let index = 0; index < 2; index++) {
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, 50, randint(-50, 50))
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, -50, randint(-50, 50))
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), 50)
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), -50)
-        }
+        pause(1000)
     }
 })
 forever(function () {
@@ -615,7 +669,7 @@ forever(function () {
         music.setVolume(30)
         music.playMelody("C5 B G E F D C D ", 120)
     } else {
-        music.setVolume(35)
+        music.setVolume(30)
         music.playMelody("C5 B C5 A B G A F ", 300)
     }
 })
@@ -701,17 +755,21 @@ game.onUpdateInterval(40000, function () {
     }
     if (Count == 10) {
         Bossphu = sprites.create(assets.image`myImage`, SpriteKind.Bossphu)
+        Bossphustatus = statusbars.create(30, 5, StatusBarKind.BOSSPHUHEALTH)
+        Bossphustatus.attachToSprite(Bossphu)
+        Bossphustatus.setColor(2, 15)
+        Bossphustatus.setBarBorder(1, 5)
         tiles.placeOnRandomTile(Bossphu, sprites.builtin.forestTiles14)
         Bossphu.setVelocity(randint(-30, -45), randint(-30, -45))
         Bossphu.setBounceOnWall(true)
         SummonBoss = 2
     }
-    if (Count >= 30 || Finish == 0) {
-        if (Count < 30) {
-            Count = 30
+    if (Count >= 20 || Finish == 0) {
+        if (Count < 20) {
+            Count = 20
         }
         tiles.setCurrentTilemap(tilemap`Final map`)
-        if (Count == 30) {
+        if (Count == 20) {
             game.splash("VICTOR")
             game.splash("It's my name")
             game.splash("finally, my memory is back")
@@ -746,18 +804,25 @@ game.onUpdateInterval(40000, function () {
         if (Letter_T == 1) {
             tiles.setCurrentTilemap(tilemap`Day_Off`)
         } else {
-            tiles.setCurrentTilemap(tilemap`Day_Off1`)
+            tiles.setCurrentTilemap(tilemap`Day_Off3`)
         }
         info.changeLifeBy(-1)
         game.splash("Day", (Count + 1) / 2)
     } else {
         if (Letter_T == 1) {
-            tiles.setCurrentTilemap(tilemap`Night_Off`)
+            tiles.setCurrentTilemap(tilemap`Nights_off3`)
         } else {
-            tiles.setCurrentTilemap(tilemap`Night_Off1`)
+            tiles.setCurrentTilemap(tilemap`Nights_off4`)
         }
         if (Letter_I == 0) {
-            tiles.placeOnRandomTile(sprites.create(assets.image`I`, SpriteKind.Letter), sprites.dungeon.collectibleInsignia)
+            I = sprites.create(assets.image`I`, SpriteKind.Player)
+            animation.runImageAnimation(
+            I,
+            assets.animation`I_animation`,
+            100,
+            true
+            )
+            tiles.placeOnRandomTile(I, sprites.dungeon.collectibleInsignia)
             Letter_I += 1
         }
         info.changeScoreBy(2)

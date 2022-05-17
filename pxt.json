@@ -4,7 +4,9 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1"
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.1",
+        "controller": "*",
+        "character-animations": "github:riknoll/character-animations#v0.3.2"
     },
     "files": [
         "main.blocks",
@@ -20,7 +22,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.8.22",
+        "target": "1.8.23",
         "targetId": "arcade"
     },
     "supportedTargets": [
