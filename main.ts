@@ -13,7 +13,7 @@ namespace StatusBarKind {
 }
 statusbars.onStatusReached(StatusBarKind.BOSSPHUHEALTH, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Percentage, 0, function (status) {
     SummonBoss = 3
-    R = sprites.create(assets.image`R`, SpriteKind.Player)
+    R = sprites.create(assets.image`R`, SpriteKind.Letter)
     animation.runImageAnimation(
     R,
     assets.animation`R_animation`,
@@ -86,6 +86,10 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Place, function (sprite, otherSp
     otherSprite.destroy(effects.spray, 500)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Cup, function (sprite, otherSprite) {
+    game.showLongText("I won...", DialogLayout.Full)
+    game.showLongText("I had protected this place....", DialogLayout.Full)
+    game.showLongText("But...", DialogLayout.Full)
+    game.showLongText("What keep me stay alive now ?", DialogLayout.Full)
     game.over(true)
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -112,10 +116,10 @@ sprites.onOverlap(SpriteKind.bullet, SpriteKind.Enemy, function (sprite, otherSp
     sprite.destroy()
 })
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
-    T = sprites.create(assets.image`T`, SpriteKind.Player)
+    T = sprites.create(assets.image`T`, SpriteKind.Letter)
     tiles.placeOnTile(T, location)
     animation.runImageAnimation(
-    mySprite,
+    T,
     assets.animation`T_animation`,
     100,
     true
@@ -180,19 +184,35 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Letter, function (sprite, otherSprite) {
     Finish += -1
     otherSprite.destroy(effects.spray, 500)
-    game.splash(Finish, "ITEMS LEFT")
+    if (Finish == 0) {
+        mySprite.sayText("Memory back", 2000, false)
+        pause(2000)
+        mySprite.sayText("But what about my family ?", 2000, false)
+    } else if (Finish < 2) {
+        mySprite.sayText("Is it...", 2000, false)
+        pause(2000)
+        mySprite.sayText("My name ?", 2000, false)
+    } else if (Finish < 4) {
+        mySprite.sayText("Letters...", 2000, false)
+        pause(2000)
+        mySprite.sayText("Are dancing", 2000, false)
+    } else {
+        mySprite.sayText("Broken into pieces", 2000, false)
+        pause(2000)
+        mySprite.sayText("What kind of glue for this memory ?", 2000, false)
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function (sprite, otherSprite) {
     game.over(false)
     sprite.destroy()
 })
+let projectile2: Sprite = null
+let projectile3: Sprite = null
+let projectile: Sprite = null
 let Ghost: Sprite = null
 let I: Sprite = null
-let projectile2: Sprite = null
-let Bossphu: Sprite = null
-let projectile3: Sprite = null
 let Boss: Sprite = null
-let projectile: Sprite = null
+let Bossphu: Sprite = null
 let T: Sprite = null
 let Bossstatus: StatusBarSprite = null
 let Cup: Sprite = null
@@ -206,6 +226,7 @@ let right = 0
 let SummonBoss = 0
 let Finish = 0
 let mySprite: Sprite = null
+game.showLongText("This is a story about a former soldier...", DialogLayout.Full)
 mySprite = sprites.create(assets.image`soldier`, SpriteKind.Player)
 mySprite.setBounceOnWall(true)
 info.setLife(6)
@@ -590,92 +611,9 @@ mySprite,
 100,
 character.rule(Predicate.MovingLeft)
 )
-game.onUpdateInterval(1000, function () {
-    if (SummonBoss == 1) {
-        for (let index = 0; index < 2 + Finish; index++) {
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50 + randint(Finish, Finish + 20), randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)))
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50 + randint(Finish, Finish + 20), randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)))
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20))
-            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)), -50 + randint(Finish, Finish + 20))
-        }
-    } else if (SummonBoss == 2) {
-        for (let index = 0; index < Finish; index++) {
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, 50, randint(-50, 50))
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, -50, randint(-50, 50))
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), 50)
-            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), -50)
-        }
-    }
-})
-forever(function () {
-    if (controller.A.isPressed()) {
-        if (right) {
-            projectile2 = sprites.createProjectileFromSprite(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . 2 2 . . . . . . . 
-                . . . . . . 3 1 1 3 . . . . . . 
-                . . . . . 2 1 1 1 1 2 . . . . . 
-                . . . . . 2 1 1 1 1 2 . . . . . 
-                . . . . . . 3 1 1 3 . . . . . . 
-                . . . . . . . 2 2 . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, mySprite, 250, 0)
-            animation.runImageAnimation(
-            mySprite,
-            assets.animation`Right Gun`,
-            250,
-            false
-            )
-        } else {
-            projectile2 = sprites.createProjectileFromSprite(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . 2 2 . . . . . . . 
-                . . . . . . 3 1 1 3 . . . . . . 
-                . . . . . 2 1 1 1 1 2 . . . . . 
-                . . . . . 2 1 1 1 1 2 . . . . . 
-                . . . . . . 3 1 1 3 . . . . . . 
-                . . . . . . . 2 2 . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                `, mySprite, -250, 0)
-            animation.runImageAnimation(
-            mySprite,
-            assets.animation`Left Gun`,
-            250,
-            false
-            )
-        }
-        projectile2.setKind(SpriteKind.bullet)
-        pause(1000)
-    }
-})
-forever(function () {
-    if (Count % 2 != 0) {
-        music.setVolume(30)
-        music.playMelody("C5 B G E F D C D ", 120)
-    } else {
-        music.setVolume(30)
-        music.playMelody("C5 B C5 A B G A F ", 300)
-    }
-})
 // days and nights
 // 80s = 1day
-game.onUpdateInterval(40000, function () {
+game.onUpdateInterval(35000, function () {
     Count += 1
     while (Tree_list.length != 0) {
         Apple_tree.push(sprites.create(img`
@@ -770,10 +708,16 @@ game.onUpdateInterval(40000, function () {
         }
         tiles.setCurrentTilemap(tilemap`Final map`)
         if (Count == 20) {
+            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Place)
+            sprites.destroyAllSpritesOfKind(SpriteKind.tree)
+            sprites.destroyAllSpritesOfKind(SpriteKind.seed)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+            sprites.destroyAllSpritesOfKind(SpriteKind.Bossphu)
             game.splash("VICTOR")
-            game.splash("It's my name")
-            game.splash("finally, my memory is back")
-            game.splash("READY FOR FINAL BOSS")
+            game.splash("My name...")
+            game.splash("is VICTOR...")
+            game.splash("FINAL BOSS")
             SummonBoss = 0
         }
         if (SummonBoss == 0) {
@@ -793,13 +737,8 @@ game.onUpdateInterval(40000, function () {
             mySprite.setPosition(10, 55)
             Boss.follow(mySprite, 20)
             SummonBoss += 1
-            sprites.destroyAllSpritesOfKind(SpriteKind.Food)
-            sprites.destroyAllSpritesOfKind(SpriteKind.Place)
-            sprites.destroyAllSpritesOfKind(SpriteKind.tree)
-            sprites.destroyAllSpritesOfKind(SpriteKind.seed)
-            sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-            sprites.destroyAllSpritesOfKind(SpriteKind.Bossphu)
         }
+        mySprite.sayText("I shouldn't touch that", 1000, false)
     } else if (Count % 2 != 0) {
         if (Letter_T == 1) {
             tiles.setCurrentTilemap(tilemap`Day_Off`)
@@ -807,7 +746,7 @@ game.onUpdateInterval(40000, function () {
             tiles.setCurrentTilemap(tilemap`Day_Off3`)
         }
         info.changeLifeBy(-1)
-        game.splash("Day", (Count + 1) / 2)
+        mySprite.sayText("Day " + Count, 1000, false)
     } else {
         if (Letter_T == 1) {
             tiles.setCurrentTilemap(tilemap`Nights_off3`)
@@ -815,7 +754,7 @@ game.onUpdateInterval(40000, function () {
             tiles.setCurrentTilemap(tilemap`Nights_off4`)
         }
         if (Letter_I == 0) {
-            I = sprites.create(assets.image`I`, SpriteKind.Player)
+            I = sprites.create(assets.image`I`, SpriteKind.Letter)
             animation.runImageAnimation(
             I,
             assets.animation`I_animation`,
@@ -889,13 +828,103 @@ game.onUpdateInterval(40000, function () {
             Ghost.setBounceOnWall(true)
         }
     }
-    for (let value of tiles.getTilesByType(assets.tile`myTile6`)) {
-        tiles.setWallAt(value, true)
-    }
     for (let value of tiles.getTilesByType(sprites.builtin.forestTiles0)) {
         tiles.setWallAt(value, true)
     }
     for (let value of tiles.getTilesByType(sprites.castle.rock0)) {
         tiles.setWallAt(value, true)
+    }
+})
+game.onUpdateInterval(5000, function () {
+    if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), assets.tile`myTile6`)) {
+        mySprite.sayText("Im too tired", 500, false)
+        info.changeLifeBy(-1)
+        controller.moveSprite(mySprite, 20, 20)
+        scene.cameraShake(4, 500)
+    } else {
+        controller.moveSprite(mySprite, 100, 100)
+    }
+})
+game.onUpdateInterval(1000, function () {
+    if (SummonBoss == 1) {
+        for (let index = 0; index < 2 + Finish; index++) {
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, 50 + randint(Finish, Finish + 20), randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, -50 + randint(Finish, Finish + 20), randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20))
+            projectile = sprites.createProjectileFromSprite(assets.image`Power`, Boss, randint(-1 * (50 + randint(Finish, Finish + 20)), 50 + randint(Finish, Finish + 20)), -50 + randint(Finish, Finish + 20))
+        }
+    } else if (SummonBoss == 2) {
+        for (let index = 0; index < Finish; index++) {
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, 50, randint(-50, 50))
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, -50, randint(-50, 50))
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), 50)
+            projectile3 = sprites.createProjectileFromSprite(assets.image`bat`, Bossphu, randint(-50, 50), -50)
+        }
+    }
+})
+forever(function () {
+    if (controller.A.isPressed()) {
+        if (right) {
+            projectile2 = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, mySprite, 250, 0)
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Right Gun`,
+            250,
+            false
+            )
+        } else {
+            projectile2 = sprites.createProjectileFromSprite(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . 2 1 1 1 1 2 . . . . . 
+                . . . . . . 3 1 1 3 . . . . . . 
+                . . . . . . . 2 2 . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, mySprite, -250, 0)
+            animation.runImageAnimation(
+            mySprite,
+            assets.animation`Left Gun`,
+            250,
+            false
+            )
+        }
+        projectile2.setKind(SpriteKind.bullet)
+        pause(1000)
+    }
+})
+forever(function () {
+    if (Count % 2 != 0) {
+        music.setVolume(30)
+        music.playMelody("C5 B G E F D C D ", 120)
+    } else {
+        music.setVolume(30)
+        music.playMelody("C5 B C5 A B G A F ", 300)
     }
 })
