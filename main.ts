@@ -60,7 +60,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Food, function (sprite, othe
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileGrass1) || tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileDarkGrass1)) {
         tiles.setTileAt(mySprite.tilemapLocation(), sprites.castle.tilePath5)
-    } else if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
+    } else if (Apple_tree.length + Tree_list.length + Seed_list.length < 20 && tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
         Seed_list.push(sprites.create(assets.image`Seed`, SpriteKind.seed))
         tiles.placeOnTile(Seed_list[Seed_list.length - 1], mySprite.tilemapLocation())
         tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`Dat Trong Cay`)
@@ -706,7 +706,7 @@ game.onUpdateInterval(35000, function () {
             tiles.setCurrentTilemap(tilemap`Day_Off3`)
         }
         info.changeLifeBy(-1)
-        mySprite.sayText("Day " + Count, 1000, false)
+        mySprite.sayText("Day " + (Count + 1) / 2, 1000, false)
     } else {
         if (Letter_T == 1) {
             tiles.setCurrentTilemap(tilemap`Nights_off3`)
