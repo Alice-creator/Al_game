@@ -47,7 +47,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bossphu, function (sprite, other
         info.changeScoreBy(1)
         Bossphustatus.value += -20
     } else {
-        info.changeLifeBy(-3)
+        info.changeLifeBy(-5)
     }
     pause(1000)
 })
@@ -60,7 +60,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Food, function (sprite, othe
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileGrass1) || tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileDarkGrass1)) {
         tiles.setTileAt(mySprite.tilemapLocation(), sprites.castle.tilePath5)
-    } else if (Apple_tree.length + Tree_list.length + Seed_list.length < 20 && tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
+    } else if (Apple_tree.length + Tree_list.length + Seed_list.length < 12 && tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
         Seed_list.push(sprites.create(assets.image`Seed`, SpriteKind.seed))
         tiles.placeOnTile(Seed_list[Seed_list.length - 1], mySprite.tilemapLocation())
         tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`Dat Trong Cay`)
@@ -182,6 +182,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Letter, function (sprite, otherSprite) {
+    pause(1000)
     Finish += -1
     otherSprite.destroy(effects.spray, 500)
     if (Finish == 0) {
@@ -725,7 +726,7 @@ game.onUpdateInterval(35000, function () {
             Letter_I += 1
         }
         info.changeScoreBy(2)
-        for (let index = 0; index < 2 + randint(0, 4); index++) {
+        for (let index = 0; index < 2 + randint(0, 7); index++) {
             Ghost = sprites.create(img`
                 ........................
                 ........................
@@ -756,7 +757,7 @@ game.onUpdateInterval(35000, function () {
             Ghost.setVelocity(randint(-50, 50), randint(-50, 50))
             Ghost.setBounceOnWall(true)
         }
-        for (let index = 0; index < 4; index++) {
+        for (let index = 0; index < Count / 2; index++) {
             Ghost = sprites.create(img`
                 ........................
                 ........................
