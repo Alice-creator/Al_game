@@ -45,7 +45,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bossphu, function (sprite, other
         }
         music.baDing.play()
         info.changeScoreBy(1)
-        Bossphustatus.value += -20
+        Bossphustatus.value += -7
     } else {
         info.changeLifeBy(-5)
     }
@@ -72,7 +72,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.bullet, SpriteKind.Bossphu, function (sprite, otherSprite) {
-    Bossphustatus.value += -20
+    Bossphustatus.value += -7
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Place, function (sprite, otherSprite) {
     V = sprites.create(assets.image`V`, SpriteKind.Letter)
