@@ -697,7 +697,7 @@ game.onUpdateInterval(35000, function () {
             Bossstatus.setColor(2, 15)
             Boss.setPosition(142, 64)
             mySprite.setPosition(10, 55)
-            Boss.follow(mySprite, 20)
+            Boss.follow(mySprite, 30)
             SummonBoss += 1
         }
         mySprite.sayText("I shouldn't touch that", 1000, false)
