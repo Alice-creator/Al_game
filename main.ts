@@ -60,7 +60,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Food, function (sprite, othe
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileGrass1) || tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tileDarkGrass1)) {
         tiles.setTileAt(mySprite.tilemapLocation(), sprites.castle.tilePath5)
-    } else if (Apple_tree.length + Tree_list.length + Seed_list.length < 12 && tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
+    } else if (Apple_tree.length + Tree_list.length + Seed_list.length < 10 && tiles.tileAtLocationEquals(mySprite.tilemapLocation(), sprites.castle.tilePath5)) {
         Seed_list.push(sprites.create(assets.image`Seed`, SpriteKind.seed))
         tiles.placeOnTile(Seed_list[Seed_list.length - 1], mySprite.tilemapLocation())
         tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`Dat Trong Cay`)
