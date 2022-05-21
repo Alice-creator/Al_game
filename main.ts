@@ -45,7 +45,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bossphu, function (sprite, other
         }
         music.baDing.play()
         info.changeScoreBy(1)
-        Bossphustatus.value += -7
+        Bossphustatus.value += -10
     } else {
         info.changeLifeBy(-5)
     }
@@ -72,7 +72,8 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.bullet, SpriteKind.Bossphu, function (sprite, otherSprite) {
-    Bossphustatus.value += -7
+    Bossphustatus.value += -10
+    sprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Place, function (sprite, otherSprite) {
     V = sprites.create(assets.image`V`, SpriteKind.Letter)
@@ -131,7 +132,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     right = 1
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    info.changeLifeBy(-1 + -1 * Finish)
+    info.changeLifeBy(-3 + -1 * Finish)
     otherSprite.destroy()
 })
 sprites.onOverlap(SpriteKind.Boss, SpriteKind.bullet, function (sprite, otherSprite) {
@@ -754,7 +755,7 @@ game.onUpdateInterval(35000, function () {
                 ........................
                 `, SpriteKind.Enemy)
             tiles.placeOnRandomTile(Ghost, sprites.builtin.forestTiles14)
-            Ghost.setVelocity(randint(-50, 50), randint(-50, 50))
+            Ghost.setVelocity(randint(-75, 75), randint(-75, 75))
             Ghost.setBounceOnWall(true)
         }
         for (let index = 0; index < Count / 2; index++) {
@@ -785,7 +786,7 @@ game.onUpdateInterval(35000, function () {
                 ........................
                 `, SpriteKind.Enemy)
             tiles.placeOnRandomTile(Ghost, sprites.builtin.forestTiles14)
-            Ghost.follow(mySprite, randint(30, 60))
+            Ghost.follow(mySprite, randint(40, 70))
             Ghost.setBounceOnWall(true)
         }
     }
@@ -794,16 +795,6 @@ game.onUpdateInterval(35000, function () {
     }
     for (let value of tiles.getTilesByType(sprites.castle.rock0)) {
         tiles.setWallAt(value, true)
-    }
-})
-game.onUpdateInterval(5000, function () {
-    if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), assets.tile`myTile6`)) {
-        mySprite.sayText("Im too tired", 500, false)
-        info.changeLifeBy(-1)
-        controller.moveSprite(mySprite, 20, 20)
-        scene.cameraShake(4, 500)
-    } else {
-        controller.moveSprite(mySprite, 100, 100)
     }
 })
 game.onUpdateInterval(1000, function () {
@@ -887,5 +878,15 @@ forever(function () {
     } else {
         music.setVolume(30)
         music.playMelody("C5 B C5 A B G A F ", 300)
+    }
+})
+game.onUpdateInterval(3000, function () {
+    if (tiles.tileAtLocationEquals(mySprite.tilemapLocation(), assets.tile`myTile6`)) {
+        mySprite.sayText("Im too tired", 500, false)
+        info.changeLifeBy(-1)
+        controller.moveSprite(mySprite, 20, 20)
+        scene.cameraShake(4, 500)
+    } else {
+        controller.moveSprite(mySprite, 100, 100)
     }
 })
